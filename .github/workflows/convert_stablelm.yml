@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  deploy:
+  convert:
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment

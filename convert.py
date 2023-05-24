@@ -3,8 +3,11 @@ from llm_rs.repository import Repository
 from llm_rs import ContainerType,QuantizationType,AutoQuantizer
 import sys
 import os
+import logging 
 
 if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.INFO)
     if len(sys.argv) < 4:
         print("Usage: python convert.py <repo_name> <output_directory> <source_repo1> <source_repo2> ....")
         sys.exit(1)
