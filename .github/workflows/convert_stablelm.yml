@@ -6,7 +6,7 @@ permissions:
   contents: write
 jobs:
   convert:
-    runs-on: macos-13-xl
+    runs-on: macos-latest-xl
     steps:
       - name: Set up environment
         run: |
