@@ -1,0 +1,1 @@
+llm-rs[convert]==0.2.4 
