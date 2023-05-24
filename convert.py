@@ -29,7 +29,7 @@ if __name__ == "__main__":
             repo.upload(quantized)
             if REMOVE_CONVERTED:
                 os.remove(quantized)
-
+        repo.upload(converted_model)
         if REMOVE_CONVERTED:
             os.remove(converted_model)
 
