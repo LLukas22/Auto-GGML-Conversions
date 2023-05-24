@@ -1,0 +1,27 @@
+name: Convert stablelm
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install torch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Convert Model
+        run: python convert.py pythia-ggml ./cache/ EleutherAI/pythia-70m
