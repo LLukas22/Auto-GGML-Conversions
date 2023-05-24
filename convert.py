@@ -12,7 +12,7 @@ if __name__ == "__main__":
         print("Usage: python convert.py <repo_name> <output_directory> <source_repo1> <source_repo2> ....")
         sys.exit(1)
 
-
+    REMOVE_CONVERTED = True
     repo_name = sys.argv[1]
     output_dir = sys.argv[2]
     targets = sys.argv[3:]
@@ -25,7 +25,12 @@ if __name__ == "__main__":
     for target in targets:
         converted_model = AutoConverter.convert(target, output_dir)
         for container_type in container_types:
-            quantized = AutoQuantizer.quantize(converted_model)
+            quantized = AutoQuantizer.quantize(converted_model,container=container_type)
             repo.upload(quantized)
+            if REMOVE_CONVERTED:
+                os.remove(quantized)
+
+        if REMOVE_CONVERTED:
+            os.remove(converted_model)
 
     print("Done!")
