@@ -1,8 +1,1 @@
---index-url==https://download.pytorch.org/whl/cpu
-torch
-transformers
-sentencepiece
-accelerate
-tqdm
-einops
-llm-rs==0.2.4 
+llm-rs[convert]==0.2.4 
