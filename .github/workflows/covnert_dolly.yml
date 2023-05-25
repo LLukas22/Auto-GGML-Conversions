@@ -1,4 +1,4 @@
-name: Convert stablelm
+name: Convert dolly-v2
 on:
   workflow_dispatch:
 
@@ -6,7 +6,10 @@ permissions:
   contents: write
 jobs:
   convert:
-    runs-on: macos-latest-xl
+    strategy:
+      matrix:
+        model: [databricks/dolly-v2-3b]
+    runs-on: ubuntu-latest
     steps:
       - name: Set up environment
         run: |
@@ -24,4 +27,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Convert Model
-        run: python convert.py stablelm-ggml ./cache/ stabilityai/stablelm-base-alpha-3b
+        run: python convert.py dolly-v2-ggml ./cache/ ${{ matrix.model }}   

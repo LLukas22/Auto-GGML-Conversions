@@ -6,6 +6,9 @@ permissions:
   contents: write
 jobs:
   convert:
+    strategy:
+      matrix:
+        model: [EleutherAI/pythia-70m, EleutherAI/pythia-160m, EleutherAI/pythia-410m,EleutherAI/pythia-1b,EleutherAI/pythia-1.4b,EleutherAI/pythia-2.8b]
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment
@@ -24,4 +27,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Convert Model
-        run: python convert.py pythia-ggml ./cache/ EleutherAI/pythia-70m EleutherAI/pythia-160m EleutherAI/pythia-410m EleutherAI/pythia-1b EleutherAI/pythia-1.4b EleutherAI/pythia-2.8b
+        run: python convert.py pythia-ggml ./cache/ ${{ matrix.model }}   
