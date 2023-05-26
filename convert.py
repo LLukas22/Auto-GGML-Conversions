@@ -6,7 +6,7 @@ import os
 import logging 
 
 
-ORGANIZATION="Rustformers"
+ORGANIZATION="rustformers"
 REMOVE_CONVERTED = True
 
 if __name__ == "__main__":
