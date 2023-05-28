@@ -28,3 +28,24 @@ jobs:
 
       - name: Convert Model
         run: python convert.py bloom-ggml ./cache/ ${{ matrix.model }}   
+
+  readme:
+      needs: convert
+      runs-on: ubuntu-latest
+      steps:
+      - name: Set up environment
+        run: |
+          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install README dependencies
+        run: pip install -r readme_requirements.txt
+
+      - name: Build Readme
+        run: python generate_readme.py bloom-ggml
+
+
