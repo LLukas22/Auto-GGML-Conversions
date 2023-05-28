@@ -1,5 +1,7 @@
 name: Convert pythia
 on:
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -27,4 +29,23 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Convert Model
-        run: python convert.py pythia-ggml ./cache/ ${{ matrix.model }}   
+        run: python convert.py pythia-ggml ./cache/ ${{ matrix.model }}
+
+  readme:
+    needs: convert
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up environment
+      run: |
+        echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install README dependencies
+      run: pip install -r readme_requirements.txt
+
+    - name: Build Readme
+      run: python generate_readme.py pythia-ggml

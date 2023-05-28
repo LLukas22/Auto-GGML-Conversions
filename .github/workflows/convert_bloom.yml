@@ -1,5 +1,7 @@
 name: Convert bloom
 on:
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -8,7 +10,7 @@ jobs:
   convert:
     strategy:
       matrix:
-        model: [bigscience/bloom-560m, bigscience/bloom-1b7, bigscience/bloom-3b]
+        model: [bigscience/bloom-560m, bigscience/bloom-1b1, bigscience/bloom-1b7, bigscience/bloom-3b]
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment

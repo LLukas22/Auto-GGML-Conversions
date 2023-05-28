@@ -50,7 +50,7 @@ if __name__ == "__main__":
         metadata = ModelMetadata.deserialize(json.loads(file.read_text()))
         models[file.stem] = metadata
 
-    # generate the readme
+    models = dict(sorted(models.items(), key=lambda x: (x[0], x[1].quantization)))
 
     
     # generate the model table
@@ -66,6 +66,8 @@ if __name__ == "__main__":
             "V3"
         ])
 
+
+    # generate the readme
     headers = ["Name", "Based on", "Type", "Container", "GGML Version"]
     table = tabulate(table_data, headers=headers, tablefmt="pipe")
 
