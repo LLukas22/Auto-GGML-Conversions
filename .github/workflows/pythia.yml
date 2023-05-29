@@ -1,8 +1,11 @@
-name: Convert bloomz
+name: Convert pythia
 on:
   release:
     types: [published]
   workflow_dispatch:
+
+env:
+  REPO: pythia-ggml
 
 permissions:
   contents: write
@@ -10,7 +13,7 @@ jobs:
   convert:
     strategy:
       matrix:
-        model: [bigscience/bloomz-560m, bigscience/bloomz-1b1, bigscience/bloomz-1b7, bigscience/bloomz-3b]
+        model: [EleutherAI/pythia-70m, EleutherAI/pythia-160m, EleutherAI/pythia-410m,EleutherAI/pythia-1b,EleutherAI/pythia-1.4b,EleutherAI/pythia-2.8b]
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment
@@ -29,10 +32,32 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Convert Model
-        run: python convert.py bloomz-ggml ./cache/ ${{ matrix.model }}   
+        run: python convert.py $REPO ./cache/ ${{ matrix.model }}
+
+  quantize:
+    needs: convert
+    strategy:
+      matrix:
+        model: [pythia-70m-f16.bin, pythia-160m-f16.bin, pythia-410m-f16.bin, pythia-1b-f16.bin, pythia-1.4b-f16.bin, pythia-2.8b-f16.bin]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install -r quantize_requirements.txt
+
+      - name: Convert Model
+        run: python quantize.py $REPO ./cache/ ${{ matrix.model }}
 
   readme:
-    needs: convert
+    needs: quantize
     runs-on: ubuntu-latest
     steps:
     - name: Set up environment
@@ -48,4 +73,4 @@ jobs:
       run: pip install -r readme_requirements.txt
 
     - name: Build Readme
-      run: python generate_readme.py bloomz-ggml
+      run: python generate_readme.py $REPO

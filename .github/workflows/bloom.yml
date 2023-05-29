@@ -4,6 +4,9 @@ on:
     types: [published]
   workflow_dispatch:
 
+env:
+  REPO: bloom-ggml
+
 permissions:
   contents: write
 jobs:
@@ -29,10 +32,32 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Convert Model
-        run: python convert.py bloom-ggml ./cache/ ${{ matrix.model }}   
+        run: python convert.py $REPO ./cache/ ${{ matrix.model }}   
+
+  quantize:
+    needs: convert
+    strategy:
+      matrix:
+        model: [bloom-560m-f16.bin, bloom-1b1-f16.bin, bloom-1b7-f16.bin, bloom-3b-f16.bin]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install -r quantize_requirements.txt
+
+      - name: Convert Model
+        run: python quantize.py $REPO ./cache/ ${{ matrix.model }}
 
   readme:
-      needs: convert
+      needs: quantize
       runs-on: ubuntu-latest
       steps:
       - name: Set up environment
@@ -48,6 +73,6 @@ jobs:
         run: pip install -r readme_requirements.txt
 
       - name: Build Readme
-        run: python generate_readme.py bloom-ggml
+        run: python generate_readme.py $REPO
 
 
