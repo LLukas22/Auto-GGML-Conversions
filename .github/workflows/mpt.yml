@@ -1,0 +1,51 @@
+name: Quantize GPT-J
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  REPO: mpt-7b-ggml
+
+permissions:
+  contents: write
+jobs:
+  quantize:
+    strategy:
+      matrix:
+        model: [mpt-7b-chat-f16.bin, mpt-7b-f16.bin, mpt-7b-instruct-f16.bin, mpt-7b-storywriter-f16.bin]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install -r quantize_requirements.txt
+
+      - name: Convert Model
+        run: python quantize.py $REPO ./cache/ ${{ matrix.model }}
+
+  readme:
+    needs: quantize
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up environment
+      run: |
+        echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
+
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install README dependencies
+      run: pip install -r readme_requirements.txt
+
+    - name: Build Readme
+      run: python generate_readme.py $REPO
