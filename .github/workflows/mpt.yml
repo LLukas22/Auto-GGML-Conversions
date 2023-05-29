@@ -1,4 +1,4 @@
-name: Quantize GPT-J
+name: Quantize MPT
 on:
   release:
     types: [published]
