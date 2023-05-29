@@ -10,32 +10,7 @@ env:
 permissions:
   contents: write
 jobs:
-  convert:
-    strategy:
-        matrix:
-          model: [databricks/dolly-v2-3b]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up environment
-        run: |
-          echo "HUGGINGFACE_TOKEN=${{ secrets.HUGGINGFACE_TOKEN }}" >> $GITHUB_ENV
-
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-
-      - name: Install torch
-        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Convert Model
-        run: python convert.py $REPO ./cache/ ${{ matrix.model }}
-
   quantize:
-    needs: convert
     strategy:
       matrix:
         model: [dolly-v2-12b-f16.bin,dolly-v2-7b-f16.bin,dolly-v2-3b-f16.bin]
