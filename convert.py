@@ -5,15 +5,8 @@ import sys
 import os
 import logging 
 
-
 ORGANIZATION="rustformers"
 REMOVE_CONVERTED = True
-
-QUANTIZATION_TASKS = [
-    (ContainerType.GGML,QuantizationType.Q4_0),
-    (ContainerType.GGJT,QuantizationType.Q4_0),
-    (ContainerType.GGJT,QuantizationType.Q5_1),
-]
 
 if __name__ == "__main__":
 
@@ -32,11 +25,6 @@ if __name__ == "__main__":
 
     for target in targets:
         converted_model = AutoConverter.convert(target, output_dir)
-        for container_type,quantization_type in QUANTIZATION_TASKS:
-            quantized = AutoQuantizer.quantize(converted_model,container=container_type,quantization=quantization_type)
-            repo.upload(quantized)
-            if REMOVE_CONVERTED:
-                os.remove(quantized)
         repo.upload(converted_model)
         if REMOVE_CONVERTED:
             os.remove(converted_model)
