@@ -1,4 +1,4 @@
-name: Convert Dolly-V2
+name: Quantize Dolly-V2
 on:
   release:
     types: [published]

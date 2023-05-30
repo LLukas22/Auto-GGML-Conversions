@@ -11,3 +11,6 @@ Currently the following HF repos are created via these conversions:
 The following HF repos are quantized via these scripts:
 * https://huggingface.co/rustformers/mpt-7b-ggml
 * https://huggingface.co/rustformers/gpt-j-ggml
+* https://huggingface.co/rustformers/stablelm-ggml
+* https://huggingface.co/rustformers/dolly-v2-ggml
+* https://huggingface.co/rustformers/gpt4all-j-ggml
