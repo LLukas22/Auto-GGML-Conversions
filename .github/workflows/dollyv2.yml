@@ -13,7 +13,7 @@ jobs:
   quantize:
     strategy:
       matrix:
-        model: [dolly-v2-12b-f16.bin,dolly-v2-7b-f16.bin,dolly-v2-3b-f16.bin]
+        model: [dolly-v2-7b-f16.bin,dolly-v2-3b-f16.bin]
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment
