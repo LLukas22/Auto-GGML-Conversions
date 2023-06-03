@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         model: [nomic-ai/gpt4all-j]
-    runs-on: kreusselgruft
+    runs-on: self-hosted
     steps:
       - name: Set up environment
         run: |
