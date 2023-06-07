@@ -1,11 +1,11 @@
-name: Convert redpajama
+name: Convert redpajama-7b
 on:
   release:
     types: [published]
   workflow_dispatch:
 
 env:
-  REPO: redpajama-ggml
+  REPO: redpajama-7b-ggml
   
 permissions:
   contents: write
@@ -13,8 +13,8 @@ jobs:
   convert:
     strategy:
         matrix:
-          model: [togethercomputer/RedPajama-INCITE-Chat-3B-v1, togethercomputer/RedPajama-INCITE-Instruct-3B-v1, togethercomputer/RedPajama-INCITE-Base-3B-v1]
-    runs-on: ubuntu-latest
+          model: [togethercomputer/RedPajama-INCITE-7B-Base, togethercomputer/RedPajama-INCITE-7B-Instruct, togethercomputer/RedPajama-INCITE-7B-Chat]
+    runs-on: self-hosted
     steps:
       - name: Set up environment
         run: |
@@ -38,7 +38,7 @@ jobs:
     needs: convert
     strategy:
       matrix:
-        model: [RedPajama-INCITE-Base-3B-v1-f16.bin, RedPajama-INCITE-Chat-3B-v1-f16.bin, RedPajama-INCITE-Instruct-3B-v1-f16.bin]
+        model: [RedPajama-INCITE-7B-Base-f16.bin, RedPajama-INCITE-7B-f16.bin, RedPajama-INCITE-7B-Chat-f16.bin]
     runs-on: ubuntu-latest
     steps:
       - name: Set up environment
