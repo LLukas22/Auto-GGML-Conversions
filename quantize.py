@@ -12,6 +12,7 @@ REMOVE = True
 QUANTIZATION_TASKS = [
     (ContainerType.GGML,QuantizationType.Q4_0),
     (ContainerType.GGJT,QuantizationType.Q4_0),
+    (ContainerType.GGML,QuantizationType.Q5_1),
     (ContainerType.GGJT,QuantizationType.Q5_1),
 ]
 
