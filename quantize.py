@@ -6,6 +6,8 @@ import logging
 from pathlib import Path
 from huggingface_hub import snapshot_download
 
+NO_GGML_LITERAL = "--no-ggml"
+
 ORGANIZATION="rustformers"
 REMOVE = True
 
@@ -26,6 +28,12 @@ if __name__ == "__main__":
     repo_name = sys.argv[1]
     output_dir = sys.argv[2]
     targets = sys.argv[3:]
+
+    for target in targets:
+        if target == NO_GGML_LITERAL:
+            QUANTIZATION_TASKS = [task for task in QUANTIZATION_TASKS if task[0] != ContainerType.GGML]
+            targets.remove(NO_GGML_LITERAL)
+            
     token = os.environ.get("HUGGINGFACE_TOKEN",None)
     repo = Repository(repo_name,ORGANIZATION,token=token)
     print(f"Quantizing {'|'.join(targets)} into {repo.name}...")
